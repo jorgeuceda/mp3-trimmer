@@ -1,0 +1,15 @@
+{
+  "name": "mp3-trimmer",
+  "version": "1.0.0",
+  "description": "Simple web app to trim uploaded MP3 files",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "multer": "^1.4.5-lts.1",
+    "fluent-ffmpeg": "^2.1.2"
+  }
+}

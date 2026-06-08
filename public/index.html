@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MP3 Trimmer</title>
+  <style>
+    body {font-family: Arial, sans-serif; margin: 2rem;}
+    .container {max-width: 400px; margin: auto;}
+    label {display: block; margin-top: 1rem;}
+    button {margin-top: 1rem;}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>MP3 Trimmer</h1>
+    <form id="trimForm" enctype="multipart/form-data">
+      <label>
+        MP3 File:
+        <input type="file" name="audio" accept="audio/mp3" required />
+      </label>
+      <label>
+        Start:
+        <input type="number" name="start_min" placeholder="minutes" min="0" step="1" required />
+        <input type="number" name="start_sec" placeholder="seconds" min="0" max="59" step="0.1" required />
+      </label>
+      <label>
+        End:
+        <input type="number" name="end_min" placeholder="minutes" min="0" step="1" required />
+        <input type="number" name="end_sec" placeholder="seconds" min="0" max="59" step="0.1" required />
+      </label>
+      <button type="submit">Trim</button>
+    </form>
+    <div id="status"></div>
+  </div>
+  <script>
+    const form = document.getElementById('trimForm');
+    const status = document.getElementById('status');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      status.textContent = 'Uploading...';
+      const data = new FormData(form);
+      try {
+        const res = await fetch('/trim', { method: 'POST', body: data });
+        if (!res.ok) throw new Error(await res.text());
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = res.headers.get('content-disposition')?.split('filename=')[1] || 'trimmed.mp3';
+        a.click();
+        URL.revokeObjectURL(url);
+        status.textContent = 'Download ready';
+      } catch (err) {
+        status.textContent = 'Error: ' + err.message;
+      }
+    });
+  </script>
+</body>
+</html>

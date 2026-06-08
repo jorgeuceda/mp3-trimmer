@@ -1,4 +1,4 @@
-# MP3 Trimmer
+# Splice - MP3 Trimmer
 
 A tiny web application that lets you upload an MP3 file, specify start and end times, and download a trimmed version of the audio. It consists of a static front‑end (HTML + JavaScript) and a lightweight Express server that uses **ffmpeg** to perform the actual trimming.
 
